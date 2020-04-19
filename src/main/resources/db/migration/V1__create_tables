@@ -1,0 +1,38 @@
+drop table if exists parcela;
+drop table if exists lancamento;
+drop table if exists categoria;
+
+create table categoria (
+	id integer unsigned auto_increment,
+    descricao varchar(100),
+    imagem varchar(100),
+    primary key(id)
+) engine=InnoDB;    
+
+create table lancamento (
+	id integer unsigned not null auto_increment,
+    id_categoria integer unsigned not null,
+    data_hora timestamp default current_timestamp,
+    historico varchar(200),
+    primary key (id)
+) engine=innoDB;
+
+alter table lancamento add constraint fk_lancamento_categoria
+foreign key(id_categoria) references categoria (id);
+
+create table parcela (
+	id integer unsigned not null auto_increment,
+    id_lancamento integer unsigned not null,
+    parcela varchar(20),
+    vencimento date not null,
+    valor numeric(9, 2) default 0,
+    desconto numeric(9, 2) default 0,
+    acrescimo numeric(9, 2) default 0,
+    descricao_acresc_desc varchar(100),
+    liquidacao date,
+    primary key (id)
+) engine=InnoDB;
+
+alter table parcela add constraint fk_parcela_lancamento
+foreign key (id_lancamento) references lancamento (id);
+
