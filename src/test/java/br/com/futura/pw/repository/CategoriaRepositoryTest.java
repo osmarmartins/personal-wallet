@@ -8,7 +8,9 @@ import java.util.Optional;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,18 +24,24 @@ import br.com.futura.pw.entity.Categoria;
 @ActiveProfiles("test")
 public class CategoriaRepositoryTest {
 	
+	private final static String DESCRICAO = "Categoria de teste";
+	
+	private Categoria categoria;
+	private Long id;
+	
 	@Autowired
 	private CategoriaRepository repository;
 	
-	private Long id;
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none(); 
 	
 	@Before
 	public void setUp() {
 		Categoria c = new Categoria();
-		c.setDescricao("Teste");
+		c.setDescricao(DESCRICAO);
 		
-		Categoria response = repository.save(c);
-		this.id = response.getId();
+		categoria = repository.save(c);
+		id = categoria.getId();
 	}
 	
 	@After
@@ -43,22 +51,36 @@ public class CategoriaRepositoryTest {
 	
 	@Test
 	public void deveSalvarCategoria() {
-		Categoria c = new Categoria();
-		c.setId(1L);
-		c.setDescricao("Teste");
-		c.setImagem("");
-		
-		Categoria response = repository.save(c);
-
-		assertNotNull(response);
+		assertNotNull(categoria);
+		assertEquals(DESCRICAO, categoria.getDescricao());
 	}
 	
 	@Test
 	public void deveBuscarCategoriaSalva() {
-		Optional<Categoria> response = repository.findById(this.id);
+		Optional<Categoria> response = repository.findById(id);
 		
 		assertTrue(response.isPresent());
-		assertEquals("Teste", response.get().getDescricao());
+		assertEquals(DESCRICAO, response.get().getDescricao());
+	}
+	
+//	@Test
+	public void deveGerarExcecaoParaDescricaoComMenosDe3Caracteres() {
+		Categoria c = new Categoria();
+		c.setDescricao("Te");
+		
+		repository.save(c);
+
+		expectedException.expectMessage("Descrição deve conter entre 3 e 30 caracteres");
+	}
+
+//	@Test
+	public void deveGerarExcecaoParaDescricaoComMaisDe30Caracteres() {
+		Categoria c = new Categoria();
+		c.setDescricao("123456789012345678901234567890-ERRO");
+		
+		repository.save(c);
+
+		expectedException.expectMessage("Descrição deve conter entre 3 e 30 caracteres");
 	}
 
 }

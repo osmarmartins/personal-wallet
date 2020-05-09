@@ -33,14 +33,11 @@ public class CategoriaServiceTest {
 	public void setUp() {
 		BDDMockito.given(repository.findById(Mockito.anyLong()))
 			.willReturn(Optional.of(new Categoria()));
-		
-		
 	}
 	
 	@Test
 	public void deveBuscarCategoriaPorId() {
 		Optional<Categoria> categoria = service.buscarPor(1L);
-		
 		assertTrue(categoria.isPresent());
 	}
 
