@@ -37,6 +37,6 @@ public class Lancamento implements Serializable {
 	private SituacaoLancamento situacao;
 	
 	@OneToMany(mappedBy = "lancamento")
-	private List<Vencimento> vencimentos;
+	private List<Parcela> parcelas;
 
 }

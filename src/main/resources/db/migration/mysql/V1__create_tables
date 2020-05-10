@@ -26,9 +26,6 @@ create table parcela (
     parcela varchar(20),
     vencimento date not null,
     valor numeric(9, 2) default 0,
-    desconto numeric(9, 2) default 0,
-    acrescimo numeric(9, 2) default 0,
-    descricao_acresc_desc varchar(100),
     liquidacao date,
     primary key (id)
 ) engine=InnoDB;

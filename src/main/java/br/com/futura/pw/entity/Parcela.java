@@ -11,15 +11,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import lombok.Data;
 
 @Entity
 @Table(name = "vencimento")
 @Data
-public class Vencimento implements Serializable {
+public class Parcela implements Serializable {
 	
 	private static final long serialVersionUID = -116030643637690486L;
 
@@ -32,6 +30,8 @@ public class Vencimento implements Serializable {
 	private LocalDate vencimento;
 	
 	private BigDecimal valor;
+	
+	private LocalDate liquidacao;
 
 	@ManyToOne
 	@JoinColumn(name = "id_lancamento")
